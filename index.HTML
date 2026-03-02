@@ -1,0 +1,2553 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EcoTravel Ukraine — Екологічний туризм</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-green: #2D5016;
+            --olive: #87A878;
+            --sand: #F5F1E8;
+            --chocolate: #3E2723;
+            --white: #FFFFFF;
+            --mist: #E8F4F8;
+            --accent: #FF6B35;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--chocolate);
+            line-height: 1.6;
+            background-color: var(--sand);
+            overflow-x: hidden;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Навігація */
+        nav {
+            position: fixed;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.5rem 5%;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 700;
+            color: var(--forest-green);
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px rgba(45,80,22,0.3); }
+            to { text-shadow: 0 0 20px rgba(45,80,22,0.6), 0 0 30px rgba(135,168,120,0.4); }
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: clamp(0.5rem, 2vw, 2rem);
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .nav-menu a, .nav-menu button {
+            text-decoration: none;
+            color: var(--chocolate);
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            white-space: nowrap;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active, .nav-menu button:hover {
+            background: var(--forest-green);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45,80,22,0.3);
+        }
+
+        .nav-menu .highlight-btn {
+            background: linear-gradient(45deg, var(--accent), #FF8C42);
+            color: var(--white);
+            animation: pulse-btn 2s infinite;
+        }
+
+        @keyframes pulse-btn {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255,107,53,0); }
+        }
+
+        /* Мобільне меню */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--forest-green);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Модальні вікна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 30px;
+            padding: clamp(2rem, 5vw, 3rem);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--chocolate);
+            transition: transform 0.3s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--sand);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--forest-green);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--sand);
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 0.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--chocolate);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .modal-tab.active {
+            color: var(--forest-green);
+        }
+
+        .modal-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--forest-green);
+            animation: expand 0.3s ease;
+        }
+
+        @keyframes expand {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        /* Секції */
+        .section {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section з відео-фоном */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(45,80,22,0.8), rgba(135,168,120,0.6)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920') center/cover;
+            animation: kenBurns 20s ease infinite alternate;
+        }
+
+        @keyframes kenBurns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: float-particle 15s infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 1rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            margin-bottom: 1rem;
+            animation: slideInUp 1s ease, text-shimmer 3s infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes text-shimmer {
+            0%, 100% { background-position: -200% center; }
+            50% { background-position: 200% center; }
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease 0.2s both;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: clamp(0.8rem, 2vw, 1rem) clamp(2rem, 5vw, 3rem);
+            background: linear-gradient(45deg, var(--olive), var(--forest-green));
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            transition: all 0.3s ease;
+            animation: slideInUp 1s ease 0.4s both;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(45,80,22,0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(45,80,22,0.4);
+        }
+
+        /* Плаваючі елементи */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Загальні стилі для контенту */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: clamp(1rem, 5vw, 2rem) clamp(1rem, 5vw, 5%);
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+            color: var(--forest-green);
+            animation: fadeIn 0.8s ease;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--olive), var(--forest-green));
+            margin: 1rem auto;
+            border-radius: 2px;
+            animation: expand-width 1s ease;
+        }
+
+        @keyframes expand-width {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        .section-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto clamp(2rem, 5vw, 3rem);
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            padding: 0 1rem;
+        }
+
+        /* Картки з покращеними анімаціями */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: clamp(1rem, 3vw, 2rem);
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.6s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--olive), var(--forest-green));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            height: clamp(180px, 25vw, 220px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.15) rotate(2deg);
+        }
+
+        .card-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.4));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon {
+            font-size: clamp(3rem, 8vw, 4rem);
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            animation: icon-bounce 2s infinite;
+        }
+
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card-content {
+            padding: clamp(1.2rem, 3vw, 1.5rem);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            color: var(--forest-green);
+            margin-bottom: 0.8rem;
+        }
+
+        .card-content p {
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .sub-links {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sub-links button {
+            padding: 0.4rem 0.8rem;
+            background: var(--sand);
+            color: var(--forest-green);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sub-links button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .sub-links button:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+
+        .sub-links button:hover {
+            background: var(--forest-green);
+            color: var(--white);
+            transform: scale(1.05);
+        }
+
+        /* Маршрути з паралаксом */
+        .route-card {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease;
+            position: relative;
+        }
+
+        .route-header {
+            height: clamp(200px, 40vw, 300px);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .route-header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+
+        .route-header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .route-header-icon {
+            font-size: clamp(4rem, 10vw, 6rem);
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+            animation: float-icon 3s ease-in-out infinite;
+        }
+
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .route-body {
+            padding: clamp(1.5rem, 4vw, 2rem);
+            position: relative;
+        }
+
+        .route-body::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: var(--white);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .route-body h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--forest-green);
+            margin-bottom: 1rem;
+            word-break: break-word;
+        }
+
+        .route-body h3 {
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            margin: 1.5rem 0 1rem;
+            color: var(--forest-green);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .route-body h3::before {
+            content: '🌿';
+        }
+
+        .route-body p, .route-body li {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            line-height: 1.8;
+        }
+
+        .route-meta {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: linear-gradient(135deg, var(--sand), var(--mist));
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            white-space: nowrap;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .meta-item:hover {
+            border-color: var(--olive);
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .feature-tag {
+            background: linear-gradient(135deg, var(--mist), var(--sand));
+            color: var(--forest-green);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            animation: fadeIn 0.5s ease;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .feature-tag:hover {
+            background: var(--forest-green);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        /* Галерея фото */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.2);
+        }
+
+        /* Інфо-секції */
+        .info-section {
+            background: var(--white);
+            padding: clamp(2rem, 5vw, 3rem);
+            border-radius: 30px;
+            margin: 2rem 0;
+            animation: fadeIn 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(135,168,120,0.1) 0%, transparent 70%);
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: clamp(1rem, 3vw, 2rem);
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            transition: all 0.3s;
+            border-radius: 20px;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            background: var(--sand);
+        }
+
+        .info-icon {
+            width: clamp(50px, 10vw, 70px);
+            height: clamp(50px, 10vw, 70px);
+            background: linear-gradient(135deg, var(--sand), var(--mist));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-card:hover .info-icon {
+            background: linear-gradient(135deg, var(--forest-green), var(--olive));
+            color: var(--white);
+            transform: scale(1.2) rotate(360deg);
+        }
+
+        .info-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--forest-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            word-break: break-word;
+        }
+
+        /* Кнопка назад */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--forest-green);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .back-btn:hover {
+            background: var(--sand);
+            transform: translateX(-10px);
+        }
+
+        /* Форми */
+        .contact-form, .booking-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: clamp(2rem, 5vw, 3rem);
+            border-radius: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .form-group {
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: var(--forest-green);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: clamp(0.8rem, 2vw, 1rem);
+            border: 2px solid var(--sand);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--olive);
+            box-shadow: 0 0 0 4px rgba(135,168,120,0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Статус бронювання */
+        .booking-status {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            flex: 1;
+            min-width: 120px;
+            padding: 1rem;
+            background: var(--sand);
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .status-item:hover {
+            transform: translateY(-5px);
+            background: var(--mist);
+        }
+
+        .status-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--forest-green);
+            display: block;
+        }
+
+        /* Футер */
+        footer {
+            background: linear-gradient(135deg, var(--chocolate), #2c1e1b);
+            color: var(--white);
+            padding: clamp(2rem, 5vw, 3rem) 5%;
+            text-align: center;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--olive), var(--forest-green), var(--olive));
+            background-size: 200% 100%;
+            animation: gradient-move 3s linear infinite;
+        }
+
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .footer-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            margin-bottom: 1rem;
+        }
+
+        .footer-content p {
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            margin: 0.5rem 0;
+            word-break: break-word;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--olive);
+            transform: translateY(-5px) rotate(360deg);
+        }
+
+        /* Пульсуюча анімація */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255,107,53,0); }
+        }
+
+        /* Завантажувач */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--sand);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-leaf {
+            font-size: 4rem;
+            animation: leaf-spin 2s ease-in-out infinite;
+        }
+
+        @keyframes leaf-spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .loader-text {
+            margin-top: 1rem;
+            color: var(--forest-green);
+            font-weight: 600;
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: 'Завантаження'; }
+            40% { content: 'Завантаження.'; }
+            60% { content: 'Завантаження..'; }
+            80%, 100% { content: 'Завантаження...'; }
+        }
+
+        /* Медіа-запити */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 0.5rem;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                transform: translateY(0);
+            }
+
+            .nav-menu a, .nav-menu button {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding: 100px 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1201px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Спеціальні ефекти */
+        .gradient-text {
+            background: linear-gradient(45deg, var(--forest-green), var(--olive));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-effect {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Спливаючі повідомлення */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--forest-green);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Плавна прокрутка */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Виділення тексту */
+        ::selection {
+            background: var(--olive);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Завантажувач -->
+    <div class="loader" id="loader">
+        <div class="loader-leaf">🌿</div>
+        <div class="loader-text">Завантаження...</div>
+    </div>
+
+    <!-- Модальне вікно для реєстрації/входу -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+            <h2>🌿 EcoTravel</h2>
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('login')">Вхід</button>
+                <button class="modal-tab" onclick="switchTab('register')">Реєстрація</button>
+            </div>
+            
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com" id="loginEmail">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" placeholder="••••••••" id="loginPassword">
+                </div>
+                <button class="cta-button" style="width: 100%; margin-top: 1rem;" onclick="handleLogin()">Увійти</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                    <a href="#" style="color: var(--olive);">Забули пароль?</a>
+                </p>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ім'я</label>
+                        <input type="text" placeholder="Ваше ім'я">
+                    </div>
+                    <div class="form-group">
+                        <label>Прізвище</label>
+                        <input type="text" placeholder="Ваше прізвище">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" placeholder="+380 __ ___ __ __">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" placeholder="Мінімум 8 символів">
+                </div>
+                <div class="form-group">
+                    <label>Підтвердження паролю</label>
+                    <input type="password" placeholder="Повторіть пароль">
+                </div>
+                <button class="cta-button" style="width: 100%; margin-top: 1rem;" onclick="handleRegister()">Зареєструватися</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно для бронювання -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal" style="max-width: 700px;">
+            <button class="modal-close" onclick="closeModal('bookingModal')">✕</button>
+            <h2>🎒 Бронювання туру</h2>
+            
+            <div class="booking-status">
+                <div class="status-item">
+                    <span class="status-number" id="stepNumber">1</span>
+                    <small>Оберіть тур</small>
+                </div>
+                <div class="status-item">
+                    <span class="status-number">2</span>
+                    <small>Деталі</small>
+                </div>
+                <div class="status-item">
+                    <span class="status-number">3</span>
+                    <small>Підтвердження</small>
+                </div>
+            </div>
+
+            <div class="booking-form">
+                <div class="form-group">
+                    <label>Оберіть напрямок</label>
+                    <select id="tourCategory" onchange="updateTours()">
+                        <option value="">-- Виберіть категорію --</option>
+                        <option value="mountains">🏔️ Гори</option>
+                        <option value="water">🌊 Вода</option>
+                        <option value="forests">🌲 Ліси</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Конкретний тур</label>
+                    <select id="tourSelect">
+                        <option value="">-- Спочатку оберіть категорію --</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата початку</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Кількість осіб</label>
+                        <input type="number" min="1" max="20" value="1" id="personsCount">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ім'я</label>
+                        <input type="text" placeholder="Ваше ім'я">
+                    </div>
+                    <div class="form-group">
+                        <label>Прізвище</label>
+                        <input type="text" placeholder="Ваше прізвище">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" placeholder="+380 95 604 10 16">
+                </div>
+
+                <div class="form-group">
+                    <label>Особливі побажання</label>
+                    <textarea rows="3" placeholder="Харчові обмеження, медичні потреби тощо..."></textarea>
+                </div>
+
+                <div style="background: var(--sand); padding: 1rem; border-radius: 15px; margin: 1rem 0;">
+                    <strong>💰 Попередній розрахунок:</strong>
+                    <span id="priceEstimate" style="float: right; font-weight: 700; color: var(--forest-green);">0 ₴</span>
+                </div>
+
+                <button class="cta-button pulse" style="width: 100%;" onclick="submitBooking()">
+                    Підтвердити бронювання
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast повідомлення -->
+    <div class="toast" id="toast">Операція успішна!</div>
+
+    <!-- НАВІГАЦІЯ -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a class="logo floating" onclick="showSection('home')">🌿 EcoTravel</a>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a onclick="showSection('about')">Про нас</a></li>
+                <li><a onclick="showSection('mountains')">Гори</a></li>
+                <li><a onclick="showSection('water')">Вода</a></li>
+                <li><a onclick="showSection('forests')">Ліси</a></li>
+                <li><a onclick="showSection('accommodation')">Проживання</a></li>
+                <li><a onclick="showSection('contacts')">Контакти</a></li>
+                <li><button class="highlight-btn" onclick="openModal('bookingModal')">🎒 Бронювати</button></li>
+                <li><button onclick="openModal('authModal')">👤 Увійти</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ГОЛОВНА СТОРІНКА -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-particles" id="particles"></div>
+            <div class="hero-content">
+                <h1>Відкрийте Україну<br><span class="gradient-text">по-новому</span></h1>
+                <p>Екологічний туризм для свідомих мандрівників</p>
+                <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати тур</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">Напрямки подорожей</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600" alt="Гори">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏔️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Гірські маршрути</h3>
+                        <p>Трекінг, пішохідні маршрути та гірські озера Карпат.</p>
+                        <div class="sub-links">
+                            <button onclick="showSection('mountains')">Всі маршрути</button>
+                            <button onclick="openModal('bookingModal')">Бронювати</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600" alt="Вода" style="filter: hue-rotate(180deg);">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌊</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Водні шляхи</h3>
+                        <p>Каякінг, рафтинг та спокійний відпочинок біля водойм.</p>
+                        <div class="sub-links">
+                            <button onclick="showSection('water')">Всі маршрути</button>
+                            <button onclick="openModal('bookingModal')">Бронювати</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600" alt="Ліси">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌲</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Лісові мандрівки</h3>
+                        <p>Національні парки, заповідники та екотропи.</p>
+                        <div class="sub-links">
+                            <button onclick="showSection('forests')">Всі маршрути</button>
+                            <button onclick="openModal('bookingModal')">Бронювати</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600" alt="Проживання">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">⛺</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Екологічне проживання</h3>
+                        <p>Глемпінги, еко-садиби та котеджі в гармонії з природою.</p>
+                        <div class="sub-links">
+                            <button onclick="showSection('accommodation')">Переглянути</button>
+                            <button onclick="openModal('bookingModal')">Бронювати</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600" alt="Фототури">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">📸</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Фототури</h3>
+                        <p>Майстер-класи з природної фотографії в мальовничих локаціях.</p>
+                        <div class="sub-links">
+                            <button onclick="showToast('Скоро буде доступно!')">Детальніше</button>
+                            <button onclick="openModal('bookingModal')">Бронювати</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=600" alt="Йога">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🧘</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Йога-ретрити</h3>
+                        <p>Відновлення сил та гармонії в гірських долинах.</p>
+                        <div class="sub-links">
+                            <button onclick="showToast('Скоро буде доступно!')">Детальніше</button>
+                            <button onclick="openModal('bookingModal')">Бронювати</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Галерея -->
+            <h2 class="section-title" style="margin-top: 4rem;">Моменти з подорожей</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="showImage(this)">
+                    <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400" alt="Трекінг">
+                </div>
+                <div class="gallery-item" onclick="showImage(this)">
+                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400" alt="Каякінг">
+                </div>
+                <div class="gallery-item" onclick="showImage(this)">
+                    <img src="https://images.unsplash.com/photo-1511497584788-876760111969?w=400" alt="Ліс">
+                </div>
+                <div class="gallery-item" onclick="showImage(this)">
+                    <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400" alt="Кемпінг">
+                </div>
+                <div class="gallery-item" onclick="showImage(this)">
+                    <img src="https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?w=400" alt="Захід сонця">
+                </div>
+                <div class="gallery-item" onclick="showImage(this)">
+                    <img src="https://images.unsplash.com/photo-1517299321609-52687d1bc55a?w=400" alt="Зима">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПРО НАС -->
+    <section id="about" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('home')">← Назад на головну</div>
+            <h2 class="section-title">Про EcoTravel Ukraine</h2>
+            <div class="info-section">
+                <p style="font-size: clamp(1rem, 3vw, 1.2rem); text-align: center; margin-bottom: 2rem; line-height: 1.8;">
+                    Ми створили цей проєкт, щоб показати неймовірну природу України та сприяти розвитку екологічного туризму. Наша мета — зберегти природу для майбутніх поколінь.
+                </p>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🎯</div>
+                        <h4>Наша місія</h4>
+                        <p>Популяризація сталого туризму та збереження природних пам'яток України</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🌿</div>
+                        <h4>Еко-підхід</h4>
+                        <p>Всі маршрути перевірені на мінімальний вплив на довкілля</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">👥</div>
+                        <h4>Спільнота</h4>
+                        <p>Більше 10,000 свідомих мандрівників уже з нами</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🏆</div>
+                        <h4>Нагороди</h4>
+                        <p>Лауреат премії "Зелений туризм України" 2026</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ГОРИ (2 рівень) — 6 варіантів -->
+    <section id="mountains" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('home')">← Назад на головну</div>
+            <h2 class="section-title">Гірські маршрути</h2>
+            <p class="section-intro">Відкрийте для себе магію Карпатських гір — від пологих зелених хребтів до найвищих вершин України</p>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600" alt="Карпати">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏔️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Карпатські маршрути</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 3-7 днів</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Комплексна програма трекінгу по наймальовничіших куточках Карпат.</p>
+                        <button class="cta-button" onclick="showSection('carpathian')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Детальніше</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600" alt="Говерла">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">⛰️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Говерла</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-2 дні</span>
+                            <span class="meta-item">⭐ Високий</span>
+                        </div>
+                        <p>Сходження на найвищу точку України — 2061 м.</p>
+                        <button class="cta-button" onclick="showSection('hoverla')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Детальніше</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600" alt="Горгани">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🥾</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Горгани</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 2-4 дні</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Скелясті вершини та нетуристичні стежки для шукачів пригод.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600" alt="Свидовець">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌿</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Свидовець</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 2-3 дні</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Пологі гірські луки, вільні коні та неймовірні заходи сонця.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1517299321609-52687d1bc55a?w=600" alt="Драгобрат">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">❄️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Драгобрат</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 3-5 днів</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Найвищий гірськолижний курорт України. Зимові трекінги.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600" alt="Боржава">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏕️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Боржава</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-2 дні</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Ідеально для початківців. Полонини, лісові стежки.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- КАРПАТСЬКІ МАРШРУТИ (3 рівень) -->
+    <section id="carpathian" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('mountains')">← Назад до гір</div>
+            
+            <div class="route-card">
+                <div class="route-header">
+                    <div class="route-header-bg" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200');"></div>
+                    <div class="route-header-content">
+                        <span class="route-header-icon">🏔️</span>
+                    </div>
+                </div>
+                <div class="route-body">
+                    <h2>Карпатські маршрути</h2>
+                    <div class="route-meta">
+                        <span class="meta-item">⏱️ Тривалість: 3-7 днів</span>
+                        <span class="meta-item">📍 Івано-Франківська область</span>
+                        <span class="meta-item">⭐ Складність: середня</span>
+                        <span class="meta-item">👥 Група: до 15 осіб</span>
+                    </div>
+                    
+                    <h3>Опис маршруту</h3>
+                    <p>Комплексна програма трекінгу включає відвідування водоспадів Шипіт, озера Синевир, старовинних гуцульських сіл та ночівлі в екологічних садибах.</p>
+                    
+                    <h3>Що включено</h3>
+                    <div class="features">
+                        <span class="feature-tag">Проживання в еко-садибах</span>
+                        <span class="feature-tag">Триразове харчування</span>
+                        <span class="feature-tag">Гід-провідник</span>
+                        <span class="feature-tag">Трансфер</span>
+                        <span class="feature-tag">Страхування</span>
+                        <span class="feature-tag">Майстер-класи</span>
+                    </div>
+
+                    <h3>Маршрут днями</h3>
+                    <ul style="margin-left: 2rem; margin-bottom: 1.5rem; line-height: 2;">
+                        <li><strong>День 1:</strong> Прибуття, поселення, знайомство з програмою</li>
+                        <li><strong>День 2:</strong> Водоспад Шипіт, гора Темнатик</li>
+                        <li><strong>День 3:</strong> Озеро Синевир, екотропа</li>
+                        <li><strong>День 4:</strong> Село Космач, майстер-клас з гончарства</li>
+                        <li><strong>День 5:</strong> Вершина Маковиця, панорамні види</li>
+                        <li><strong>День 6-7:</strong> Вільний час, виїзд</li>
+                    </ul>
+
+                    <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати зараз</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ГОВЕРЛА (3 рівень) -->
+    <section id="hoverla" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('mountains')">← Назад до гір</div>
+            
+            <div class="route-card">
+                <div class="route-header">
+                    <div class="route-header-bg" style="background-image: url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=1200');"></div>
+                    <div class="route-header-content">
+                        <span class="route-header-icon">⛰️</span>
+                    </div>
+                </div>
+                <div class="route-body">
+                    <h2>Сходження на Говерлу</h2>
+                    <div class="route-meta">
+                        <span class="meta-item">⏱️ Тривалість: 1-2 дні</span>
+                        <span class="meta-item">📍 2061 м.н.р.м.</span>
+                        <span class="meta-item">⭐ Складність: висока</span>
+                        <span class="meta-item">🌡️ Температура: +5...+15°C</span>
+                    </div>
+                    
+                    <h3>Опис маршруту</h3>
+                    <p>Сходження на найвищу точку України — гору Говерла. Маршрут для досвідчених мандрівників.</p>
+                    
+                    <h3>Програма дня</h3>
+                    <ul style="margin-left: 2rem; margin-bottom: 1.5rem; line-height: 2;">
+                        <li><strong>04:00</strong> — Виїзд з бази</li>
+                        <li><strong>06:00</strong> — Початок сходження</li>
+                        <li><strong>12:00</strong> — Вершина Говерли</li>
+                        <li><strong>17:00</strong> — Повернення на базу</li>
+                    </ul>
+
+                    <div style="background: var(--mist); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem;">
+                        <strong>⚠️ Важливо:</strong> Сходження залежить від погодних умов.
+                    </div>
+
+                    <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати зараз</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ВОДА (2 рівень) — 6 варіантів -->
+    <section id="water" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('home')">← Назад на головну</div>
+            <h2 class="section-title">Водні шляхи</h2>
+            <p class="section-intro">Відкрийте Україну з води — каякінг, рафтинг та спокійний відпочинок на берегах</p>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600" alt="Дністер">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🛶</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Дністровський каньйон</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 2-5 днів</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Сплав найдовшою річкою України через мальовничі каньйони.</p>
+                        <button class="cta-button" onclick="showSection('dnister')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Детальніше</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600" alt="Чорне море">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏖️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Чорноморське узбережжя</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 3-7 днів</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Екологічні пляжі та дельта Дунаю — рай для любителів птахів.</p>
+                        <button class="cta-button" onclick="showSection('blacksea')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Детальніше</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=600" alt="Черемош">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🚣</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Рафтинг на Черемоші</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-2 дні</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Екстремальний сплав гірською річкою з порогами.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=600" alt="Південний Буг">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🎣</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Риболовля на Південному Бузі</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-3 дні</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Спокійна річка з чистою водою. Ідеально для сімей.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600" alt="Світязь">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏊</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Озеро Світязь</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 2-4 дні</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Найглибше озеро України з кришталево чистою водою.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600" alt="Азовське море">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌅</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Азовське море</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 3-5 днів</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Мілке тепле море з цілющими грязями. Для відпочинку з дітьми.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ДНІСТЕР (3 рівень) -->
+    <section id="dnister" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('water')">← Назад до води</div>
+            
+            <div class="route-card">
+                <div class="route-header">
+                    <div class="route-header-bg" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200');"></div>
+                    <div class="route-header-content">
+                        <span class="route-header-icon">🛶</span>
+                    </div>
+                </div>
+                <div class="route-body">
+                    <h2>Дністровський каньйон</h2>
+                    <div class="route-meta">
+                        <span class="meta-item">⏱️ 2-5 днів</span>
+                        <span class="meta-item">📍 Тернопільська/Хмельницька обл.</span>
+                        <span class="meta-item">⭐ Складність: легка</span>
+                    </div>
+                    
+                    <p>Сплав по Дністру — один з найпопулярніших екологічних маршрутів України.</p>
+                    
+                    <h3>На маршруті</h3>
+                    <div class="features">
+                        <span class="feature-tag">Окарський каньйон</span>
+                        <span class="feature-tag">Печера Кришталева</span>
+                        <span class="feature-tag">Водоспад Джурин</span>
+                        <span class="feature-tag">Руфорти XVII ст.</span>
+                        <span class="feature-tag">Дикі пляжі</span>
+                    </div>
+
+                    <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати зараз</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ЧОРНОМОРСЬКЕ УЗБЕРЕЖЖЯ (3 рівень) -->
+    <section id="blacksea" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('water')">← Назад до води</div>
+            
+            <div class="route-card">
+                <div class="route-header">
+                    <div class="route-header-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200');"></div>
+                    <div class="route-header-content">
+                        <span class="route-header-icon">🏖️</span>
+                    </div>
+                </div>
+                <div class="route-body">
+                    <h2>Чорноморське узбережжя</h2>
+                    <div class="route-meta">
+                        <span class="meta-item">⏱️ 3-7 днів</span>
+                        <span class="meta-item">📍 Одеська область</span>
+                        <span class="meta-item">⭐ Складність: легка</span>
+                    </div>
+                    
+                    <p>Екологічний відпочинок на Чорному морі без переповнених пляжів.</p>
+                    
+                    <h3>Програма туру</h3>
+                    <ul style="margin-left: 2rem; margin-bottom: 1.5rem; line-height: 2;">
+                        <li>Дослідження біосферного заповідника "Дунайський"</li>
+                        <li>Спостереження за птахами в дельті Дунаю</li>
+                        <li>Відпочинок на диких пляжах</li>
+                        <li>Дегустація місцевої риби та вина</li>
+                    </ul>
+
+                    <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати зараз</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ЛІСИ (2 рівень) — 6 варіантів -->
+    <section id="forests" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('home')">← Назад на головну</div>
+            <h2 class="section-title">Лісові мандрівки</h2>
+            <p class="section-intro">Національні парки, заповідники та таємничі ліси України</p>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600" alt="Синевир">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌲</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Національний парк "Синевир"</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-3 дні</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Перлина Карпат — озеро Синевир та ліси бурих ведмедів.</p>
+                        <button class="cta-button" onclick="showSection('synevyr')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Детальніше</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1511497584788-876760111969?w=600" alt="Полісся">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌳</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Поліський заповідник</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 2-4 дні</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Найбільший лісовий масив України з унікальною флорою та фауною.</p>
+                        <button class="cta-button" onclick="showSection('polissya')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Детальніше</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1507041957456-9c397ce39c97?w=600" alt="Карпатський заповідник">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🦌</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Карпатський біосферний заповідник</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 2-5 днів</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Оленячі ферми, олені та козулі в природному середовищі.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1606041008023-472dfb5e530f?w=600" alt="Гриби">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🍄</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Грибні місця Житомирщини</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-2 дні</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Сезонні тури за білими грибами з досвідченим грибником.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600" alt="Нарциси">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌸</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Долина нарцисів</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1 день</span>
+                            <span class="meta-item">⭐ Легкий</span>
+                        </div>
+                        <p>Унікальне місце в Карпатах де цвіте рідкісний нарцис.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1516214104703-d870798883c5?w=600" alt="Чорнобиль">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🦉</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Ліси Чорнобиля</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">⏱️ 1-2 дні</span>
+                            <span class="meta-item">⭐ Середній</span>
+                        </div>
+                        <p>Екскурсії в зону відчуження. Дикі тварини та відродження природи.</p>
+                        <button class="cta-button" onclick="openModal('bookingModal')" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.9rem;">Бронювати</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СИНЕВИР (3 рівень) -->
+    <section id="synevyr" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('forests')">← Назад до лісів</div>
+            
+            <div class="route-card">
+                <div class="route-header">
+                    <div class="route-header-bg" style="background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200');"></div>
+                    <div class="route-header-content">
+                        <span class="route-header-icon">🌲</span>
+                    </div>
+                </div>
+                <div class="route-body">
+                    <h2>Національний парк "Синевир"</h2>
+                    <div class="route-meta">
+                        <span class="meta-item">⏱️ 1-3 дні</span>
+                        <span class="meta-item">📍 Закарпатська область</span>
+                        <span class="meta-item">⭐ Складність: легка</span>
+                    </div>
+                    
+                    <p>"Морське око" Карпат — озеро Синевир розташоване на висоті 989 метрів.</p>
+                    
+                    <h3>Що побачите</h3>
+                    <div class="features">
+                        <span class="feature-tag">Озеро Синевир</span>
+                        <span class="feature-tag">Центр реабілітації ведмедів</span>
+                        <span class="feature-tag">Водоспад Синевирський</span>
+                        <span class="feature-tag">Екотропи</span>
+                    </div>
+
+                    <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати зараз</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОЛІССЯ (3 рівень) -->
+    <section id="polissya" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('forests')">← Назад до лісів</div>
+            
+            <div class="route-card">
+                <div class="route-header">
+                    <div class="route-header-bg" style="background-image: url('https://images.unsplash.com/photo-1511497584788-876760111969?w=1200');"></div>
+                    <div class="route-header-content">
+                        <span class="route-header-icon">🌳</span>
+                    </div>
+                </div>
+                <div class="route-body">
+                    <h2>Поліський природний заповідник</h2>
+                    <div class="route-meta">
+                        <span class="meta-item">⏱️ 2-4 дні</span>
+                        <span class="meta-item">📍 Житомирська/Рівненська обл.</span>
+                        <span class="meta-item">⭐ Складність: середня</span>
+                    </div>
+                    
+                    <p>Найбільший лісовий масив України, включений до мережі біосферних заповідників ЮНЕСКО.</p>
+                    
+                    <h3>Флора та фауна</h3>
+                    <ul style="margin-left: 2rem; margin-bottom: 1.5rem; line-height: 1.8;">
+                        <li>Болота з журавлиною та сфагнумом</li>
+                        <li>Дубові праліси віком 300+ років</li>
+                        <li>Зубри — найбільші ссавці Європи</li>
+                        <li>Рисі, вовки, видри, бобри</li>
+                    </ul>
+
+                    <button class="cta-button pulse" onclick="openModal('bookingModal')">🎒 Забронювати зараз</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПРОЖИВАННЯ — 6 варіантів -->
+    <section id="accommodation" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('home')">← Назад на головну</div>
+            <h2 class="section-title">Екологічне проживання</h2>
+            <p class="section-intro">Комфорт без шкоди довкіллю — глемпінги, еко-садиби та котеджі</p>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600" alt="Глемпінг">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">⛺</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Глемпінги Карпат</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">💰 від 2500₴/ніч</span>
+                            <span class="meta-item">⭐ Комфорт</span>
+                        </div>
+                        <p>Комфортні намети зі справжніми ліжками та панорамними вікнами.</p>
+                        <div class="features" style="margin-top: 1rem;">
+                            <span class="feature-tag">Сніданок</span>
+                            <span class="feature-tag">Wi-Fi</span>
+                            <span class="feature-tag">Опалення</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=600" alt="Еко-садиба">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏡</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Еко-садиби</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">💰 від 1200₴/ніч</span>
+                            <span class="meta-item">⭐ Автентичність</span>
+                        </div>
+                        <p>Традиційні дерев'яні будинки з сучасним комфортом.</p>
+                        <div class="features" style="margin-top: 1rem;">
+                            <span class="feature-tag">Харчування</span>
+                            <span class="feature-tag">Сауна</span>
+                            <span class="feature-tag">Майстер-класи</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=600" alt="Притулок">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🏔️</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Гірські притулки</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">💰 від 800₴/ніч</span>
+                            <span class="meta-item">⭐ Економ</span>
+                        </div>
+                        <p>Альпійські будиночки на висоті 1500+ метрів.</p>
+                        <div class="features" style="margin-top: 1rem;">
+                            <span class="feature-tag">Спільна кухня</span>
+                            <span class="feature-tag">Пічка</span>
+                            <span class="feature-tag">Трекінг поруч</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600" alt="Еко-готель">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌊</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Еко-готелі біля води</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">💰 від 3500₴/ніч</span>
+                            <span class="meta-item">⭐ Люкс</span>
+                        </div>
+                        <p>Сучасні готелі з панорамними вікнами на озера чи річки.</p>
+                        <div class="features" style="margin-top: 1rem;">
+                            <span class="feature-tag">СПА</span>
+                            <span class="feature-tag">Басейн</span>
+                            <span class="feature-tag">Ресторан</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600" alt="Будинок на дереві">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🌲</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Будинки на деревах</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">💰 від 4000₴/ніч</span>
+                            <span class="meta-item">⭐ Романтика</span>
+                        </div>
+                        <p>Унікальні будиночки серед крон дерев.</p>
+                        <div class="features" style="margin-top: 1rem;">
+                            <span class="feature-tag">Панорама</span>
+                            <span class="feature-tag">Гамаки</span>
+                            <span class="feature-tag">Зіп-лайн</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600" alt="Йога-ретрит">
+                        <div class="card-image-overlay">
+                            <span class="card-icon">🧘</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Йога-ретрити</h3>
+                        <div class="route-meta">
+                            <span class="meta-item">💰 від 5000₴/тиждень</span>
+                            <span class="meta-item">⭐ Здоров'я</span>
+                        </div>
+                        <p>Комплексні програми з йоги, медитації та детоксу.</p>
+                        <div class="features" style="margin-top: 1rem;">
+                            <span class="feature-tag">Йога</span>
+                            <span class="feature-tag">Вега-меню</span>
+                            <span class="feature-tag">Медитації</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section" style="margin-top: 3rem;">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--forest-green); font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 4vw, 1.8rem);">
+                    Чому еко-проживання?
+                </h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">♻️</div>
+                        <p>Сонячні панелі та збиральні системи дощової води</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🌱</div>
+                        <p>Органічні продукти з власного городу</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔥</div>
+                        <p>Опалення пелетами та дровами з обрізків</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🚫</div>
+                        <p>Відмова від пластику та одноразових предметів</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- КОНТАКТИ -->
+    <section id="contacts" class="section">
+        <div class="container" style="padding-top: 100px;">
+            <div class="back-btn" onclick="showSection('home')">← Назад на головну</div>
+            <h2 class="section-title">Зв'яжіться з нами</h2>
+            
+            <div class="contact-form">
+                <div class="form-group">
+                    <label>Ваше ім'я</label>
+                    <input type="text" placeholder="Введіть ім'я">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" placeholder="+380 __ ___ __ __">
+                </div>
+                <div class="form-group">
+                    <label>Оберіть маршрут</label>
+                    <input type="text" placeholder="Наприклад: Говерла, Дністер...">
+                </div>
+                <div class="form-group">
+                    <label>Повідомлення</label>
+                    <textarea rows="4" placeholder="Ваші запитання чи побажання..."></textarea>
+                </div>
+                <button class="cta-button" style="width: 100%;">Відправити заявку</button>
+            </div>
+
+            <div class="info-section" style="margin-top: 3rem;">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">📞</div>
+                        <h4>Телефон</h4>
+                        <p style="font-size: clamp(0.9rem, 2.5vw, 1.1rem); font-weight: 600;">+380 95 604 10 16</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">✉️</div>
+                        <h4>Email</h4>
+                        <p style="font-size: clamp(0.8rem, 2vw, 1rem); word-break: break-all;">karynavarakuta@gmail.com</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <h4>Адреса</h4>
+                        <p>м. Київ, вул. Екологічна, 15</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🕐</div>
+                        <h4>Графік</h4>
+                        <p>Пн-Пт: 9:00-18:00<br>Сб: 10:00-15:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ФУТЕР -->
+    <footer>
+        <div class="footer-content">
+            <h3>🌿 EcoTravel Ukraine</h3>
+            <div class="social-links">
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Telegram">✈️</a>
+                <a href="#" title="YouTube">▶️</a>
+            </div>
+            <p style="font-size: clamp(1rem, 2.5vw, 1.2rem); margin: 1rem 0;">
+                📞 +380 95 604 10 16<br>
+                ✉️ karynavarakuta@gmail.com
+            </p>
+            <p style="margin-top: 1rem; opacity: 0.8; font-size: clamp(0.8rem, 2vw, 0.9rem);">
+                &copy; 2026 EcoTravel Ukraine. Всі права захищені.<br>
+                Створено з 💚 для природи України
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Приховати завантажувач
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+            
+            // Створити частинки
+            createParticles();
+        });
+
+        // Створення частинок
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Модальні вікна
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Перемикання табів
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.modal-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tab === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            }
+        }
+
+        // Обробка входу
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            if (email) {
+                showToast('Вітаємо! Ви успішно увійшли');
+                closeModal('authModal');
+            } else {
+                showToast('Будь ласка, введіть email');
+            }
+        }
+
+        // Обробка реєстрації
+        function handleRegister() {
+            showToast('Реєстрація успішна! Тепер увійдіть');
+            switchTab('login');
+        }
+
+        // Оновлення турів у бронюванні
+        const tours = {
+            mountains: ['Карпатські маршрути', 'Говерла', 'Горгани', 'Свидовець', 'Драгобрат', 'Боржава'],
+            water: ['Дністровський каньйон', 'Чорноморське узбережжя', 'Рафтинг на Черемоші', 'Риболовля на Південному Бузі', 'Озеро Світязь', 'Азовське море'],
+            forests: ['Синевир', 'Поліський заповідник', 'Карпатський біосферний заповідник', 'Грибні місця', 'Долина нарцисів', 'Ліси Чорнобиля']
+        };
+
+        function updateTours() {
+            const category = document.getElementById('tourCategory').value;
+            const select = document.getElementById('tourSelect');
+            select.innerHTML = '<option value="">-- Оберіть тур --</option>';
+            
+            if (category && tours[category]) {
+                tours[category].forEach(tour => {
+                    const option = document.createElement('option');
+                    option.value = tour;
+                    option.textContent = tour;
+                    select.appendChild(option);
+                });
+            }
+            
+            calculatePrice();
+        }
+
+        // Розрахунок ціни
+        function calculatePrice() {
+            const category = document.getElementById('tourCategory').value;
+            const persons = document.getElementById('personsCount').value;
+            let basePrice = 0;
+            
+            if (category === 'mountains') basePrice = 3500;
+            else if (category === 'water') basePrice = 2800;
+            else if (category === 'forests') basePrice = 2500;
+            
+            const total = basePrice * persons;
+            document.getElementById('priceEstimate').textContent = total > 0 ? total.toLocaleString() + ' ₴' : '0 ₴';
+        }
+
+        document.getElementById('personsCount').addEventListener('change', calculatePrice);
+
+        // Відправка бронювання
+        function submitBooking() {
+            showToast('Бронювання прийнято! Ми зателефонуємо вам');
+            closeModal('bookingModal');
+        }
+
+        // Toast повідомлення
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Перемикання секцій
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            const links = document.querySelectorAll('.nav-menu a');
+            links.forEach(link => link.classList.remove('active'));
+            
+            const activeLink = document.querySelector(`.nav-menu a[onclick="showSection('${sectionId}')"]`);
+            if (activeLink) activeLink.classList.add('active');
+            
+            document.getElementById('navMenu').classList.remove('active');
+        }
+
+        // Мобільне меню
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        // Скрол навігації
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Показ зображення
+        function showImage(element) {
+            const img = element.querySelector('img');
+            showToast('Відкрито галерею: ' + img.alt);
+        }
+
+        // Закриття модалок по кліку поза ними
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Паралакс ефект
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelectorAll('.route-header-bg').forEach(bg => {
+                bg.style.transform = `translateY(${scrolled * 0.5}px)`;
+            });
+        });
+    </script>
+
+</body>
+</html>
